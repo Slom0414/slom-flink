@@ -1,0 +1,23 @@
+# 进入kafka-1容器
+docker exec -it kafka-1 bash
+# 进入kafka命令列表
+cd /opt/kafka/bin
+# 然后执行创造主题
+./kafka-topics.sh \
+  --create \
+  --topic order_topic \
+  --bootstrap-server kafka-1:19092 \
+  --partitions 4 \
+  --replication-factor 2
+# 查看创建的主题
+./kafka-topics.sh --list --bootstrap-server kafka-1:19092
+
+# 连接为生产者
+./kafka-console-producer.sh \
+  --broker-list kafka-1:19092 \
+  --topic order_topic
+
+# 构造数据
+{"orderId":"o1","userId":"u1","province":"gd","amount":100.5,"ts":1710000000000}
+{"orderId":"o2","userId":"u2","province":"bj","amount":200.0,"ts":1710000001000}
+{"orderId":"o3","userId":"u1","province":"gd","amount":50.0,"ts":1710000002000}
