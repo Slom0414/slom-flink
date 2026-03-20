@@ -16,7 +16,7 @@ import org.apache.flink.streaming.api.functions.sink.filesystem.rollingpolicies.
 
 import java.time.Duration;
 
-public class OrderGmvJob {
+public class Chapter1Job {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -60,12 +60,12 @@ public class OrderGmvJob {
                 // 从 Kafka 读取原始 JSON 字符串
                 .map(json -> MAPPER.readValue(json, OrderEvent.class))
                 // 反序列化为强类型订单对象，便于后续处理
-                .map(OrderGmvJob::format)
+                .map(Chapter1Job::format)
                 // 转成最终输出的文本格式
                 .sinkTo(fileSink);
         // 将结果持续写入文件
 
-        env.execute("order-gmv-job");
+        env.execute("chapter1-job");
     }
 
     private static String format(OrderEvent e) {

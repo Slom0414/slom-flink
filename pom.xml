@@ -95,7 +95,7 @@
                             </filters>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.slom.flink.chapter1.job.OrderGmvJob</mainClass>
+                                    <mainClass>com.slom.flink.chapter1.job.Chapter2Job</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
