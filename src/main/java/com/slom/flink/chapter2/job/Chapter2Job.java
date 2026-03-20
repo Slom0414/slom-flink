@@ -85,8 +85,10 @@ public class Chapter2Job {
                 .build();
 
         // 定义侧输出流 outputTag
-        OutputTag<UserOrderEvent> userOrderEventTag = new OutputTag<>("userOrderEvent");
-        OutputTag<ProvinceGmvEvent> provinceGmvEventTag = new OutputTag<>("provinceGmvEvent");
+        OutputTag<UserOrderEvent> userOrderEventTag =
+                new OutputTag<>("userOrderEvent") {};
+        OutputTag<ProvinceGmvEvent> provinceGmvEventTag =
+                new OutputTag<>("provinceGmvEvent") {};
 
         SingleOutputStreamOperator<Object> mainStream = env
                 .fromSource(source, WatermarkStrategy.noWatermarks(), "kafka-source")
