@@ -8,6 +8,7 @@ import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -21,6 +22,9 @@ public class Chapter3Job {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(4);
         env.enableCheckpointing(5000);
+
+        ParameterTool pt = ParameterTool.fromArgs(args);
+        env.getConfig().setGlobalJobParameters(pt);
 
         KafkaSource<String> source = KafkaSource.<String>builder()
                 .setBootstrapServers("kafka-1:19092")

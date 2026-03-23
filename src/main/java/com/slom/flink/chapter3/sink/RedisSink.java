@@ -14,9 +14,12 @@ public class RedisSink extends RichSinkFunction<UserOrderAgg> {
     public void open(Configuration parameters) throws Exception {
         super.open(parameters);
 
-        ParameterTool parameterTool = ParameterTool.fromSystemProperties();
-        String redisDomain = parameterTool.get("redis.domain");
-        String redisPassword = parameterTool.get("redis.password");
+        ParameterTool pt = (ParameterTool)
+                getRuntimeContext()
+                        .getGlobalJobParameters();
+
+        String redisDomain = pt.get("redis.domain");
+        String redisPassword = pt.get("redis.password");
 
         jedis = new Jedis(redisDomain, 6379);
         jedis.auth(redisPassword);
