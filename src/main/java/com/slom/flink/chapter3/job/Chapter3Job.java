@@ -24,7 +24,8 @@ public class Chapter3Job {
         env.enableCheckpointing(5000);
 
         ParameterTool pt = ParameterTool.fromArgs(args);
-        env.getConfig().setGlobalJobParameters(pt);
+        String redisDomain = pt.getRequired("redis.domain");
+        String redisPassword = pt.getRequired("redis.password");
 
         KafkaSource<String> source = KafkaSource.<String>builder()
                 .setBootstrapServers("kafka-1:19092")
@@ -34,7 +35,7 @@ public class Chapter3Job {
                 .setValueOnlyDeserializer(new SimpleStringSchema())
                 .build();
 
-        RedisSink redisSink = new RedisSink();
+        RedisSink redisSink = new RedisSink(redisDomain,redisPassword);
 
         env.fromSource(source, WatermarkStrategy.noWatermarks(), "kafka-source")
                 .map(orderData -> MAPPER.readValue(orderData, OrderEvent.class))

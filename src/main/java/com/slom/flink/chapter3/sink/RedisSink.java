@@ -1,25 +1,29 @@
 package com.slom.flink.chapter3.sink;
 
 import com.slom.flink.chapter3.aggregate.UserOrderAgg;
-import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
 import redis.clients.jedis.Jedis;
+
 
 public class RedisSink extends RichSinkFunction<UserOrderAgg> {
 
     private transient Jedis jedis;
 
+    private final String redisDomain;
+
+    private final String redisPassword;
+
+    public RedisSink(String redisDomain, String redisPassword) {
+        this.redisDomain = redisDomain;
+        this.redisPassword = redisPassword;
+    }
+
     @Override
     public void open(Configuration parameters) throws Exception {
         super.open(parameters);
 
-        ParameterTool pt = (ParameterTool)
-                getRuntimeContext()
-                        .getGlobalJobParameters();
 
-        String redisDomain = pt.get("redis.domain");
-        String redisPassword = pt.get("redis.password");
 
         jedis = new Jedis(redisDomain, 6379);
         jedis.auth(redisPassword);
