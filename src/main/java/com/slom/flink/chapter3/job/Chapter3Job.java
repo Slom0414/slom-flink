@@ -3,7 +3,7 @@ package com.slom.flink.chapter3.job;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.slom.flink.chapter3.aggregate.UserOrderAgg;
 import com.slom.flink.chapter3.event.OrderEvent;
-import com.slom.flink.chapter3.sink.RedisPipelineSink;
+import com.slom.flink.chapter3.sink.RedisSink;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.api.common.typeinfo.Types;
@@ -30,7 +30,7 @@ public class Chapter3Job {
                 .setValueOnlyDeserializer(new SimpleStringSchema())
                 .build();
 
-        RedisPipelineSink redisPipelineSink = new RedisPipelineSink();
+        RedisSink redisSink = new RedisSink();
 
         env.fromSource(source, WatermarkStrategy.noWatermarks(), "kafka-source")
                 .map(orderData -> MAPPER.readValue(orderData, OrderEvent.class))
@@ -64,8 +64,8 @@ public class Chapter3Job {
                 // 转化为UserOrderAgg对象
                 .map(t -> new UserOrderAgg(t.f0, t.f1))
 
-                // 使用RedisPipelineSink
-                .addSink(redisPipelineSink);
+                // 使用RedisSink
+                .addSink(redisSink);
 
         env.execute("chapter3-job");
     }
