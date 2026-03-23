@@ -32,7 +32,7 @@ import java.time.Duration;
  */
 public class Chapter4Job {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(4);
@@ -125,5 +125,7 @@ public class Chapter4Job {
                         }
                 ).addSink(new RedisSink(redisDomain, redisPassword));
 
+
+        env.execute("chapter4-job");
     }
 }
