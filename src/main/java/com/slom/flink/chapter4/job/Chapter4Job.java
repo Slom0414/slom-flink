@@ -58,7 +58,9 @@ public class Chapter4Job {
         WatermarkStrategy<PayEvent> wm =
                 WatermarkStrategy
                         .<PayEvent>forBoundedOutOfOrderness(Duration.ofSeconds(5))
-                        .withTimestampAssigner((e, ts) -> e.eventTime);
+                        .withTimestampAssigner((e, ts) -> e.eventTime)
+                        // 这个后面会讲解，现在先不需要了解
+                        .withIdleness(Duration.ofSeconds(10));
 
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -145,6 +147,7 @@ public class Chapter4Job {
                                         context.window().getEnd(),
                                         objectMapper.writeValueAsString(acc)
                                 );
+
 
                                 if (acc.count >= 3) {
                                     RiskAlert alert = new RiskAlert(
